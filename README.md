@@ -1,6 +1,7 @@
 # Skye Wallet Sever Api
 
-This [Skye Wallet Sever Api](https://).
+The [Skye Wallet App](https://skyewallet-client.netlify.app/).
+The [Skye Wallet server api](https://odd-blue-slug-vest.cyclic.app/).
 
 ## Available Scripts
 

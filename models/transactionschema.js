@@ -22,7 +22,8 @@ const transactionSchema = new mongoose.Schema({
     },
     user_id: {
         type: String,
-        ref: 'userschema'
+        ref: 'userschema._id',
+        required: true
     }
 })
 

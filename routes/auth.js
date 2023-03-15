@@ -17,7 +17,6 @@ router.post('/', async (req, res) => {
 
         const newTransaction = new Transactions({
             inflow: 'Welcome Bonus of $5000',
-            user_id: 'await _id'
         })
 
         const newUser = new User({
@@ -38,7 +37,21 @@ router.post('/', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-    res.status(200).json({data: `Auth List`, message: `Succeful Request`})
+    try {
+        // fetch user and test password verification
+        const userEmail = await User.findOne({ email: req.body.email })
+        if(userEmail){
+            //Check a matching password
+            const isMatchPassword = await bcrypt.compare(req.body.password, userEmail.password)
+            !isMatchPassword && res.status(404).json(`incorrect Password`);
+            const user = await User.findOne({ email: req.body.email }).select('-password');
+            isMatchPassword && res.status(200).json(user);
+        }else{
+            res.status(404).json(`Valid Email is required on Login`);
+        }
+    } catch (error) {
+        res.status(500).json(`${error}`)
+    }
 })
 
 router.post('/logout', async (req, res) => {

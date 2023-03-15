@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const User = require('../models/userschema');
 const Transactions = require('../models/transactionschema');
+const protectedRoute = require('../middleware/ProtectedRoute')
 const router = Router();
 
 //Get All Users
-router.get('/', async (req, res) => {
+router.get('/', protectedRoute, async (req, res) => {
     try {
         // This returns all the registered users but excludes their password
         User.find().select('-password').then(data => {
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
 })
 
 //Get a single user
-router.get('/:id', async (req, res) => {
+router.get('/:id',  protectedRoute, async (req, res) => {
     try {
         const userID = req.params.id
         const user =  await User.find({_id: userID}).select('-password');
@@ -32,7 +33,7 @@ router.get('/:id', async (req, res) => {
 })
 
 //Update a user based on the your provided payload
-router.patch('/:id', async (req, res) => {
+router.patch('/:id',  protectedRoute, async (req, res) => {
     const id = req.params.id
     try {
         const {email, ...rest} = req.body
@@ -49,7 +50,7 @@ router.patch('/:id', async (req, res) => {
 })
 
 //Delete a user
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',  protectedRoute, async (req, res) => {
     const id = req.params.id
     try {
         const userID =  await User.find({_id: id}).select('-password');

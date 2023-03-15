@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const User = require('../models/userschema');
 const Transactions = require('../models/transactionschema');
+const protectedRoute = require('../middleware/ProtectedRoute');
 const router = Router();
 
 //Inflow transaction Add receipt to a transaction history belonging to a user
-router.patch('/:id', async (req, res) => {
+router.patch('/:id',  protectedRoute, async (req, res) => {
     try {
         const id = req.params.id
         const user = await User.find({payment_id: id}).select('-password');
@@ -34,7 +35,7 @@ router.patch('/:id', async (req, res) => {
 
 
 //Outflow transaction Remove receipt to a transaction history belonging to a user
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',  protectedRoute, async (req, res) => {
     try {
         const id = req.params.id
         const user = await User.find({payment_id: id}).select('-password');
@@ -63,7 +64,7 @@ router.delete('/:id', async (req, res) => {
 })
 
 //Search/Query for a user using their payment id 
-router.get('/Search', async (req, res) => {
+router.get('/Search',  protectedRoute, async (req, res) => {
   let search = req.query.payments;
     try {
         // Create expression
@@ -86,14 +87,14 @@ router.get('/Search', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id',  protectedRoute, async (req, res) => {
     const id = req.params.id
     const receipt = await Transactions.find({_id: id})
     res.status(200).json(receipt)
 })
 
 //Generate new payment id
-router.patch('/:id/payment-id', async (req, res) => {
+router.patch('/:id/payment-id',  protectedRoute, async (req, res) => {
     const unique_number2 = parseInt(Math.random().toPrecision(6).slice(2)) 
     const id = req.params.id
     try {
@@ -117,7 +118,7 @@ router.patch('/:id/payment-id', async (req, res) => {
 })
 
 //Delete a payment id
-router.delete('/:id/payment-id', async (req, res) => { 
+router.delete('/:id/payment-id',  protectedRoute, async (req, res) => { 
     try {
             const userID = req.params.id
             let {payment_num} = req.body;

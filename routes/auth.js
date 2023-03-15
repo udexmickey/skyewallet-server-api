@@ -42,7 +42,7 @@ router.post('/login', async (req, res) => {
         const userEmail = await User.findOne({ email: req.body.email })
         if(userEmail){
             //Check a matching password
-            const isMatchPassword = await bcrypt.compare(req.body.password, userEmail.password)
+            const isMatchPassword = await bcrypt.compare(req.body.password, userEmail.password);
             !isMatchPassword && res.status(404).json(`incorrect Password`);
             const user = await User.findOne({ email: req.body.email }).select('-password');
             isMatchPassword && res.status(200).json(user);

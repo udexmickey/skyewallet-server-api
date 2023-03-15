@@ -1,6 +1,6 @@
-# Getting Started with Skye Wallet App
+# Skye Wallet Sever Api
 
-This [Skye Wallet App](https://).
+This [Skye Wallet Sever Api](https://).
 
 ## Available Scripts
 

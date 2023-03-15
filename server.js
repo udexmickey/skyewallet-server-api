@@ -1,18 +1,32 @@
-const express = require("express");
-const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
-const bodyParser = require("body-parser");
-let multer = require('multer');
-let forms = multer();
+const express = require("express");
 const app = express();
+
+//Security npm packages
+const cors = require("cors");
 const cookieParser = require('cookie-parser')
+
+//This are npm packages for all form type uploads  ---formdata, jsondata e.t.c
+const bodyParser = require("body-parser");
+const multer = require('multer');
+const forms = multer();
+
+//API Documentaion with @swagger
 const swaggerDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express")
+
+//Routes importations
 const authRoute = require('./routes/auth');
 const usersRoute = require('./routes/users');
 const transactionsRoute = require('./routes/transactions');
+
+//DATABASE importations
 const connectedDatabase = require('./config/db')
+
+//Server listening port
+const PORT = process.env.PORT || 3000
+
 
 //----- middelwares---//
 // Parse JSON bodies (as sent by API clients)
@@ -52,7 +66,7 @@ const options = {
         }],
 
         servers: [ { 
-            url: 'http://localhost:3000'
+            url: process.env.SWAGGERBASEURL
         }]
     },
 
@@ -68,7 +82,9 @@ const swagger = swaggerDoc(options)
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger, option))
 
-
-app.listen(process.env.PORT || 3000, () => {
-    console.log("Server is running successfully");
-})
+//Run Project when database is connected successfully
+connectedDatabase().then(conn => {
+    app.listen(PORT, () => {
+        console.log(`Server live on port ${PORT}`);
+    })
+});

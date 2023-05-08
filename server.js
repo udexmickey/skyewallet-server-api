@@ -80,7 +80,7 @@ var option = {
 const swagger = swaggerDoc(options)
 
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger, option))
+app.use("/", swaggerUi.serve, swaggerUi.setup(swagger, option))
 
 //Run Project when database is connected successfully
 connectedDatabase().then(conn => {
